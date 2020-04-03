@@ -18,7 +18,7 @@ module.exports = {
       "singleline": 10,
       "multiline": {
         "max": 1,
-        "allowFirstLine": false
+        "allowFirstLine": true
       }
     }],
     "vue/singleline-html-element-content-newline": "off",
@@ -53,7 +53,7 @@ module.exports = {
       'after': true
     }],
     'handle-callback-err': [2, '^(err|error)$'],
-    'indent': [2, 2, {
+    'indent': [0, 2, {
       'SwitchCase': 1
     }],
     'jsx-quotes': [2, 'prefer-single'],

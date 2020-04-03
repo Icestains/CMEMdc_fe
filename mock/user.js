@@ -1,4 +1,3 @@
-
 const tokens = {
   admin: {
     token: 'admin-token'
@@ -29,7 +28,13 @@ export default [
     url: '/vue-admin-template/user/login',
     type: 'post',
     response: config => {
-      const { username } = config.body
+      const { username, password } = config.body
+      if (username !== 'admin' || password !== '123456') {
+        return {
+          code: 60204,
+          message: 'Account and password are incorrect.'
+        }
+      }
       const token = tokens[username]
 
       // mock error

@@ -1,16 +1,16 @@
 <template>
   <div class="login-container">
     <el-form
-      ref="loginForm"
-      :model="loginForm"
-      :rules="loginRules"
+      ref="signUpForm"
+      :model="newUser"
+      :rules="signUpRules"
       class="login-form"
       auto-complete="on"
       label-position="left"
     >
 
       <div class="title-container">
-        <h3 class="title">登录系统</h3>
+        <h3 class="title">注册账号</h3>
       </div>
 
       <el-form-item prop="username">
@@ -19,7 +19,7 @@
         </span>
         <el-input
           ref="username"
-          v-model="loginForm.name"
+          v-model="newUser.name"
           placeholder="Username"
           name="username"
           type="text"
@@ -35,7 +35,7 @@
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="loginForm.password"
+          v-model="newUser.password"
           :type="passwordType"
           placeholder="Password"
           name="password"
@@ -51,19 +51,64 @@
         </span>
       </el-form-item>
 
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width:100%;margin:0 0 30px 0;"
-        @click.native.prevent="handleLogin"
-      >登录
-      </el-button>
+      <el-form-item prop="password">
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input
+          :key="passwordType"
+          ref="password"
+          v-model="newUser.repeatPassword"
+          :type="passwordType"
+          placeholder="Password"
+          name="password"
+          tabindex="2"
+          auto-complete="on"
+        />
+        <span
+          class="show-pwd"
+          @click="showPwd"
+        >
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+        </span>
+      </el-form-item>
+
+      <el-form-item prop="email">
+        <span class="svg-container">
+          <i class="el-icon-message"></i>
+        </span>
+        <el-input
+          :key="passwordType"
+          ref="email"
+          v-model="newUser.email"
+          type="email"
+          placeholder="Email"
+          name="email"
+          tabindex="2"
+          auto-complete="on"
+        />
+        <!--        <span-->
+        <!--          class="show-pwd"-->
+        <!--          @click="showPwd">-->
+        <!--          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>-->
+        <!--        </span>-->
+      </el-form-item>
+
       <el-button
         :loading="loading"
         type="primary"
         style="width:100%;margin:0 0 30px 0;"
         @click.native.prevent="handleSignUp"
-      >注册
+      >
+        注册
+      </el-button>
+
+      <el-button
+        type="primary"
+        style="width:100%;margin:0 0 30px 0;"
+        @click.native.prevent="handleLogin"
+      >
+        已有账号？立即登录
       </el-button>
 
       <!--      <div class="tips">-->
@@ -77,9 +122,11 @@
 
 <script>
   import { validUsername } from '@/utils/validate'
+  import { Message } from 'element-ui'
+  import { SignUp } from '@/api/user'
 
   export default {
-    name: 'Login',
+    name: 'SignUp',
     data() {
       const validateUsername = (rule, value, callback) => {
         if (!validUsername(value)) {
@@ -96,17 +143,24 @@
         }
       }
       return {
-        loginForm: {
+        newUser: {
           name: 'icestains',
-          password: 'Masquerade'
+          password: 'Masquerade',
+          repeatPassword: 'Masquerade',
+          email: 'ilichi@qq.com'
         },
-        loginRules: {
+        signUpRules: {
           name: [{
             required: true,
             trigger: 'blur',
             validator: validateUsername
           }],
           password: [{
+            required: true,
+            trigger: 'blur',
+            validator: validatePassword
+          }],
+          repeatPassword: [{
             required: true,
             trigger: 'blur',
             validator: validatePassword
@@ -122,12 +176,12 @@
       }
     },
     watch: {
-      $route: {
-        handler: function(route) {
-          this.redirect = route.query && route.query.redirect
-        },
-        immediate: true
-      }
+      // $route: {
+      //   handler: function(route) {
+      //     this.redirect = route.query && route.query.redirect
+      //   },
+      //   immediate: true
+      // }
     },
     methods: {
       showPwd() {
@@ -141,26 +195,40 @@
         })
       },
       handleLogin() {
-        if (this.isSignUp) {
-          return
-        }
-        this.$refs.loginForm.validate(valid => {
-          if (valid) {
-            this.loading = true
-            this.$store.dispatch('user/login', this.loginForm).then(() => {
-              this.$router.push({ path: this.redirect || '/' })
-              this.loading = false
-            }).catch(() => {
-              this.loading = false
-            })
-          } else {
-            console.log('error submit!!')
-            return false
-          }
-        })
+        this.$router.push({ path: this.redirect || '/' })
       },
       handleSignUp() {
-        this.$router.push({ path: '/sign-up' })
+        console.log('sign up')
+
+        this.$refs.signUpForm.validate(valid => {
+          if (valid) {
+            this.loading = true
+            console.log(this.newUser)
+            const { name, password, repeatPassword, email } = this.newUser
+            if (password !== repeatPassword) {
+              Message({
+                message: '两次密码不一致',
+                type: 'error',
+                duration: 5 * 1000
+              })
+            } else {
+              console.log(name, password, repeatPassword, email)
+              SignUp({
+                name: name,
+                password: password,
+                email: email
+              }).then(res => {
+                console.log(res)
+                Message({
+                  message: '注册成功,五秒后跳转登录页面',
+                  type: 'success',
+                  duration: 5 * 1000
+                })
+                setTimeout(this.handleLogin, 5000)
+              })
+            }
+          }
+        })
       }
     }
   }

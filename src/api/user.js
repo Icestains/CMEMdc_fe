@@ -1,24 +1,32 @@
 import request from '@/utils/request'
 
-export function login(data) {
+export function Login(data) {
   return request({
-    url: '/vue-admin-template/user/login',
+    url: '/login',
     method: 'post',
     data
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/vue-admin-template/user/info',
-    method: 'get',
-    params: { token }
+    url: '/user/info',
+    method: 'get'
   })
 }
 
 export function logout() {
   return request({
-    url: '/vue-admin-template/user/logout',
+    url: '/logout',
     method: 'post'
   })
 }
+
+export function SignUp(data) {
+  return request({
+    url: '/sign-up',
+    method: 'post',
+    data
+  })
+}
+
