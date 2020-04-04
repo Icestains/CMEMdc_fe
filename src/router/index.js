@@ -73,6 +73,17 @@ export const constantRoutes = [
     }]
   },
 
+  {
+    path: '/mqtt',
+    component: Layout,
+    children: [{
+      path: 'mqtt',
+      name: 'Mqtt',
+      component: () => import('@/views/mqtt/index'),
+      meta: { title: 'MQTT data', icon: 'table' }
+    }]
+  },
+
   // {
   //   path: '/example',
   //   component: Layout,
