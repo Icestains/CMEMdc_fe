@@ -3,38 +3,6 @@
     <div>
       mqtt server
     </div>
-    <el-form
-      ref="form"
-      :model="form"
-      label-width="120px"
-    >
-      <el-form-item label="UserName">
-        <el-input v-model="form.username" />
-      </el-form-item>
-      <el-form-item label="department">
-        <el-input v-model="form.department" />
-      </el-form-item>
-      <el-form-item label="创建时间">
-        <el-col :span="11">
-          <el-date-picker
-            v-model="form.created"
-            type="date"
-            placeholder="Pick a date"
-            style="width: 100%;"
-            format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
-          />
-        </el-col>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          @click="onSubmit"
-        >Create
-        </el-button>
-        <el-button @click="onCancel">Cancel</el-button>
-      </el-form-item>
-    </el-form>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -44,28 +12,27 @@
       highlight-current-row
     >
       <el-table-column
-        label="Uid"
-        width="100"
+        label="msgid"
       >
         <template slot-scope="{row}">
-          {{ row.Uid }}
+          {{ row.msgid }}
         </template>
       </el-table-column>
-      <el-table-column
-        class-name="status-col"
-        label="created"
-        align="center"
-        width="120"
-      >
-        <template slot-scope="{row}">
-          <el-tag>{{ row.created }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="username">
+      <!--      <el-table-column-->
+      <!--        class-name="status-col"-->
+      <!--        label="created"-->
+      <!--        align="center"-->
+      <!--        width="120"-->
+      <!--      >-->
+      <!--        <template slot-scope="{row}">-->
+      <!--          <el-tag>{{ row.created }}</el-tag>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
+      <el-table-column label="topic">
         <template slot-scope="{row}">
           <template v-if="row.edit">
             <el-input
-              v-model="row.username"
+              v-model="row.topic"
               class="edit-input"
               size="small"
             />
@@ -79,14 +46,14 @@
               cancel
             </el-button>
           </template>
-          <span v-else>{{ row.username }}</span>
+          <span v-else>{{ row.topic }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="department">
+      <el-table-column label="payload">
         <template slot-scope="{row}">
           <template v-if="row.edit">
             <el-input
-              v-model="row.department"
+              v-model="row.payload"
               class="edit-input"
               size="small"
             />
@@ -100,7 +67,7 @@
               cancel
             </el-button>
           </template>
-          <span v-else>{{ row.department }}</span>
+          <span v-else>{{ row.payload.randomData }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -144,19 +111,14 @@
 </template>
 
 <script>
-  import { getUserInfoList, newUser, deleteUser, updateUser } from '@/api/table'
+  import { getList } from '@/api/emqxjs'
 
   export default {
     name: 'Mqtt',
     data() {
       return {
         list: null,
-        listLoading: true,
-        form: {
-          username: '',
-          department: '',
-          created: ''
-        }
+        listLoading: true
       }
     },
     created() {
@@ -166,12 +128,12 @@
       async fetchData() {
         this.listLoading = true
         console.log('before await')
-        const { data } = await getUserInfoList()
+        const { data } = await getList()
         console.log('after await:', data)
         this.list = data.map(v => {
           this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
-          v.originalUsername = v.username //  will be used when user click the cancel botton
-          v.originalDepartment = v.department
+          v.originalTopic = v.topic //  will be used when user click the cancel botton
+          v.originalPayload = v.payload
           return v
         })
         this.listLoading = false
