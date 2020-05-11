@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
-    <div>
-      mqtt server
-    </div>
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <line-chart :chart-data="lineChartData" />
+    </el-row>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -67,43 +67,7 @@
               cancel
             </el-button>
           </template>
-          <span v-else>{{ row.payload.randomData }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="Actions"
-        width="200"
-      >
-        <template slot-scope="{row}">
-          <el-col v-if="row.edit">
-            <el-button
-              type="success"
-              size="small"
-              icon="el-icon-circle-check-outline"
-              @click="confirmEdit(row)"
-            >
-              Ok
-            </el-button>
-            <el-button
-              type="danger"
-              size="small"
-              icon="el-icon-delete"
-              @click="deleteUser(row.Uid)"
-            >
-              Delete
-            </el-button>
-          </el-col>
-          <el-col v-else>
-            <el-button
-              type="primary"
-              size="small"
-              icon="el-icon-edit"
-              @click="row.edit=!row.edit"
-            >
-              Edit
-            </el-button>
-          </el-col>
+          <span>{{ row.payload.randomData }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -113,12 +77,24 @@
 <script>
   import { getList } from '@/api/emqxjs'
 
+  import LineChart from './components/LineChart'
+
   export default {
     name: 'Mqtt',
+    components: {
+      LineChart
+    },
     data() {
       return {
         list: null,
-        listLoading: true
+        listLoading: true,
+        // randomData: [],
+        // randomDataTime: [],
+        lineChartData: {
+          randomData: [],
+          randomDataTime: [],
+        }
+
       }
     },
     created() {
@@ -131,9 +107,8 @@
         const { data } = await getList()
         console.log('after await:', data)
         this.list = data.map(v => {
-          this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
-          v.originalTopic = v.topic //  will be used when user click the cancel botton
-          v.originalPayload = v.payload
+          this.lineChartData.randomData.push(v.payload.randomData)
+          this.lineChartData.randomDataTime.push(v.payload.time)
           return v
         })
         this.listLoading = false

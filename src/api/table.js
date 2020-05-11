@@ -1,16 +1,16 @@
 import request from '@/utils/request'
 
-export function getList(params) {
-  return request({
-    url: '/vue-admin-template/table/list',
-    method: 'get',
-    params
-  })
-}
+// export function getList(params) {
+//   return request({
+//     url: '/vue-admin-template/table/list',
+//     method: 'get',
+//     params
+//   })
+// }
 
 export function getUserInfoList(params) {
   return request({
-    url: 'http://localhost:8081/v1/get',
+    url: '/get',
     method: 'get',
     params
   })
@@ -18,7 +18,7 @@ export function getUserInfoList(params) {
 
 export function newUser(params) {
   return request({
-    url: 'http://localhost:8081/v1/post',
+    url: '/post',
     method: 'post',
     data: params
   })
@@ -26,14 +26,14 @@ export function newUser(params) {
 
 export function deleteUser(Uid) {
   return request({
-    url: `http://localhost:8081/v1/delete/${Uid}`,
+    url: `/delete/${Uid}`,
     method: 'delete'
   })
 }
 
 export function updateUser(params) {
   return request({
-    url: `http://localhost:8081/v1/update`,
+    url: `/update`,
     method: 'post',
     data: params
   })
