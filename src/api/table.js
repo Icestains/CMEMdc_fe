@@ -10,7 +10,7 @@ import request from '@/utils/request'
 
 export function getUserInfoList(params) {
   return request({
-    url: '/get',
+    url: '/v1/get',
     method: 'get',
     params
   })
@@ -18,7 +18,7 @@ export function getUserInfoList(params) {
 
 export function newUser(params) {
   return request({
-    url: '/post',
+    url: '/v1/post',
     method: 'post',
     data: params
   })
@@ -26,14 +26,14 @@ export function newUser(params) {
 
 export function deleteUser(Uid) {
   return request({
-    url: `/delete/${Uid}`,
+    url: `/v1/delete/${Uid}`,
     method: 'delete'
   })
 }
 
 export function updateUser(params) {
   return request({
-    url: `/update`,
+    url: `/v1/update`,
     method: 'post',
     data: params
   })
