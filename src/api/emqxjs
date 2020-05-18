@@ -1,8 +1,16 @@
 import request from '@/utils/request'
 
-export function getList(params) {
+export function getDataList(params) {
   return request({
-    url: '/v1/emqx',
+    url: '/v1/emqxdata',
+    method: 'get',
+    params
+  })
+}
+
+export function getClientsList(params) {
+  return request({
+    url: '/v1/emqxclient',
     method: 'get',
     params
   })

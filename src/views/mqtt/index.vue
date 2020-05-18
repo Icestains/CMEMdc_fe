@@ -1,81 +1,71 @@
 <template>
   <div class="app-container">
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
-    </el-row>
     <el-table
-      v-loading="listLoading"
-      :data="list"
+      v-loading="ClientsListLoading"
+      :data="EmqxClientsList"
       element-loading-text="Loading"
       border
       fit
       highlight-current-row
     >
-      <el-table-column
-        label="msgid"
-      >
+      <el-table-column label="ClientId">
         <template slot-scope="{row}">
-          {{ row.msgid }}
+          {{ row.ClientId }}
         </template>
       </el-table-column>
-      <!--      <el-table-column-->
-      <!--        class-name="status-col"-->
-      <!--        label="created"-->
-      <!--        align="center"-->
-      <!--        width="120"-->
-      <!--      >-->
-      <!--        <template slot-scope="{row}">-->
-      <!--          <el-tag>{{ row.created }}</el-tag>-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
-      <el-table-column label="topic">
+      <el-table-column label="Node">
         <template slot-scope="{row}">
-          <template v-if="row.edit">
-            <el-input
-              v-model="row.topic"
-              class="edit-input"
-              size="small"
-            />
-            <el-button
-              class="cancel-btn"
-              size="small"
-              icon="el-icon-refresh"
-              type="warning"
-              @click="cancelEdit(row)"
-            >
-              cancel
-            </el-button>
-          </template>
-          <span v-else>{{ row.topic }}</span>
+          <span>{{ row.Node }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="payload">
+      <el-table-column label="上线时间">
         <template slot-scope="{row}">
-          <template v-if="row.edit">
-            <el-input
-              v-model="row.payload"
-              class="edit-input"
-              size="small"
-            />
-            <el-button
-              class="cancel-btn"
-              size="small"
-              icon="el-icon-refresh"
-              type="warning"
-              @click="cancelEdit(row)"
-            >
-              cancel
-            </el-button>
-          </template>
-          <span>{{ row.payload.randomData }}</span>
+          <span>{{ row.OnlineAt }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="{row}">
+          <span>{{ row.IsOnline }}</span>
         </template>
       </el-table-column>
     </el-table>
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <line-chart :chart-data="lineChartData" />
+    </el-row>
+
+    <!--    <el-table-->
+    <!--      v-loading="DataListLoading"-->
+    <!--      :data="EmqxDataList"-->
+    <!--      element-loading-text="Loading"-->
+    <!--      border-->
+    <!--      fit-->
+    <!--      highlight-current-row-->
+    <!--    >-->
+    <!--      <el-table-column-->
+    <!--        label="msgid"-->
+    <!--      >-->
+    <!--        <template slot-scope="{row}">-->
+    <!--          {{ row.msgid }}-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
+    <!--      <el-table-column label="topic">-->
+    <!--        <template slot-scope="{row}">-->
+    <!--          <span>{{ row.topic }}</span>-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
+    <!--      <el-table-column label="payload">-->
+    <!--        <template slot-scope="{row}">-->
+    <!--          <span>{{ row.payload.randomData }}</span>-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
+    <!--    </el-table>-->
+
   </div>
 </template>
 
 <script>
-  import { getList } from '@/api/emqxjs'
+  import { getDataList, getClientsList } from '@/api/emqxjs'
+  import { parseTime } from '@/utils'
 
   import LineChart from './components/LineChart'
 
@@ -86,32 +76,46 @@
     },
     data() {
       return {
-        list: null,
-        listLoading: true,
-        // randomData: [],
-        // randomDataTime: [],
+        EmqxDataList: null,
+        DataListLoading: true,
+        EmqxClientsList: null,
+        ClientsListLoading: true,
+
         lineChartData: {
           randomData: [],
-          randomDataTime: [],
+          randomDataTime: []
         }
 
       }
     },
     created() {
-      this.fetchData()
+      this.fetchEmqxData()
+      this.fetchEmqxClients()
     },
     methods: {
-      async fetchData() {
-        this.listLoading = true
-        console.log('before await')
-        const { data } = await getList()
-        console.log('after await:', data)
-        this.list = data.map(v => {
+      async fetchEmqxData() {
+        this.DataListLoading = true
+        const { data } = await getDataList()
+        this.EmqxDataList = data.map(v => {
           this.lineChartData.randomData.push(v.payload.randomData)
           this.lineChartData.randomDataTime.push(v.payload.time)
           return v
         })
-        this.listLoading = false
+        this.DataListLoading = false
+      },
+      async fetchEmqxClients() {
+        this.ClientsListLoading = true
+        const { data } = await getClientsList()
+        this.EmqxClientsList = data.map(v => {
+          if (v.OnlineAt > v.OfflineAt) {
+            v.IsOnline = '在线'
+          } else {
+            v.IsOnline = '离线'
+          }
+          v.OnlineAt = parseTime(v.OnlineAt, '{m}-{d} {h}:{i}:{s}')
+          return v
+        })
+        this.ClientsListLoading = false
       },
       onCancel() {},
       onSubmit() {},
