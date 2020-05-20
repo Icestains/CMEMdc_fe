@@ -144,10 +144,10 @@
       }
       return {
         newUser: {
-          name: 'icestains',
-          password: 'Masquerade',
-          repeatPassword: 'Masquerade',
-          email: 'ilichi@qq.com'
+          name: '',
+          password: '',
+          repeatPassword: '',
+          email: ''
         },
         signUpRules: {
           name: [{

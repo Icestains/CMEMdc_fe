@@ -97,8 +97,8 @@
       }
       return {
         loginForm: {
-          name: 'icestains',
-          password: 'Masquerade'
+          name: '',
+          password: ''
         },
         loginRules: {
           name: [{
