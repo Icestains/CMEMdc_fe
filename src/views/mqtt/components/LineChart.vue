@@ -66,11 +66,12 @@
         this.chart = echarts.init(this.$el, 'macarons')
         this.setOptions(this.chartData)
       },
-      setOptions({ randomDataTime, randomData } = {}) {
+      setOptions({ randomDataTime, randomData, clientId } = {}) {
         randomDataTime = randomDataTime.map(v => {
           v = parseTime(v, '{m}-{d} {h}:{i}:{s}')
           return v
         })
+        console.log(clientId)
         this.chart.setOption({
           xAxis: {
             data: randomDataTime,
@@ -105,9 +106,9 @@
             name: 'randomData',
             itemStyle: {
               normal: {
-                color: '#FF005A',
+                color: '#409EFF',
                 lineStyle: {
-                  color: '#FF005A',
+                  color: '#409EFF',
                   width: 2
                 }
               }
@@ -119,27 +120,6 @@
             animationEasing: 'cubicInOut'
           }]
 
-          //,
-          // {
-          //   name: 'actual',
-          //   smooth: true,
-          //   type: 'line',
-          //   itemStyle: {
-          //     normal: {
-          //       color: '#3888fa',
-          //       lineStyle: {
-          //         color: '#3888fa',
-          //         width: 2
-          //       },
-          //       areaStyle: {
-          //         color: '#f3f8ff'
-          //       }
-          //     }
-          //   },
-          //   data: actualData,
-          //   animationDuration: 2800,
-          //   animationEasing: 'quadraticOut'
-          // }]
         })
       }
     }
