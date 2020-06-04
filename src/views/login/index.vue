@@ -33,15 +33,7 @@
           <svg-icon icon-class="password" />
         </span>
         <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
+          :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType" placeholder="Password" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin"
         />
         <span
           class="show-pwd"
@@ -58,6 +50,7 @@
         @click.native.prevent="handleLogin"
       >登录
       </el-button>
+
       <el-button
         :loading="loading"
         type="primary"
@@ -65,11 +58,6 @@
         @click.native.prevent="handleSignUp"
       >注册
       </el-button>
-
-      <!--      <div class="tips">-->
-      <!--        <span style="margin-right:20px;">username: admin</span>-->
-      <!--        <span> password: any</span>-->
-      <!--      </div>-->
 
     </el-form>
   </div>
@@ -91,6 +79,8 @@
       const validatePassword = (rule, value, callback) => {
         if (value.length < 6) {
           callback(new Error('至少六位密码'))
+        } else if (value.length > 16) {
+          callback(new Error('密码最长 16 位'))
         } else {
           callback()
         }
@@ -110,10 +100,6 @@
             required: true,
             trigger: 'blur',
             validator: validatePassword
-          }],
-          email: [{
-            required: true,
-            trigger: 'blur'
           }]
         },
         loading: false,
@@ -141,9 +127,6 @@
         })
       },
       handleLogin() {
-        if (this.isSignUp) {
-          return
-        }
         this.$refs.loginForm.validate(valid => {
           if (valid) {
             this.loading = true

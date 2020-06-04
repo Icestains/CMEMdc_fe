@@ -87,6 +87,7 @@
         ClientsListLoading: true,
 
         realTimeData: {
+          clientId: null,
           randomData: [],
           randomDataTime: []
         },
@@ -136,7 +137,8 @@
         const subs = [`${ClientId}/${ID}`]
 
         // WebSocket 连接字符串
-        const WebSocket_URL = 'ws://47.103.5.67:8083/mqtt'
+        // const WebSocket_URL = 'ws://47.103.5.67:8083/mqtt'
+        const WebSocket_URL = 'ws://localhost:8083/mqtt'
 
         // TCP/TLS 连接字符串，仅限 Node.js 环境
         // const TCP_URL = 'mqtt://47.103.5.67/:1883'
@@ -148,7 +150,7 @@
           connectTimeout: 4000,
 
           // 认证信息
-          clientId: 'emqx_js_res',
+          clientId: 'rec_emqx_ws',
 
           // 心跳时间
           keepalive: 60,
@@ -192,6 +194,9 @@
       cancelEdit() {},
       confirmEdit() {},
       deleteUser() {}
+    },
+    beforeDestroy() {
+      this.onClose()
     }
   }
 </script>

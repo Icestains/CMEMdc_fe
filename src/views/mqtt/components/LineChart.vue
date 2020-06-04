@@ -100,10 +100,10 @@
             }
           },
           legend: {
-            data: ['randomData']
+            data: [clientId]
           },
           series: [{
-            name: 'randomData',
+            name: clientId,
             itemStyle: {
               normal: {
                 color: '#409EFF',

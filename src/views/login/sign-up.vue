@@ -75,7 +75,7 @@
 
       <el-form-item prop="email">
         <span class="svg-container">
-          <i class="el-icon-message"></i>
+          <i class="el-icon-message" />
         </span>
         <el-input
           :key="passwordType"
@@ -87,11 +87,6 @@
           tabindex="2"
           auto-complete="on"
         />
-        <!--        <span-->
-        <!--          class="show-pwd"-->
-        <!--          @click="showPwd">-->
-        <!--          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>-->
-        <!--        </span>-->
       </el-form-item>
 
       <el-button
@@ -110,11 +105,6 @@
       >
         已有账号？立即登录
       </el-button>
-
-      <!--      <div class="tips">-->
-      <!--        <span style="margin-right:20px;">username: admin</span>-->
-      <!--        <span> password: any</span>-->
-      <!--      </div>-->
 
     </el-form>
   </div>
@@ -138,6 +128,8 @@
       const validatePassword = (rule, value, callback) => {
         if (value.length < 6) {
           callback(new Error('至少六位密码'))
+        } else if (value.length > 16) {
+          callback(new Error('密码最长 16 位'))
         } else {
           callback()
         }
@@ -176,12 +168,12 @@
       }
     },
     watch: {
-      // $route: {
-      //   handler: function(route) {
-      //     this.redirect = route.query && route.query.redirect
-      //   },
-      //   immediate: true
-      // }
+      $route: {
+        handler: function(route) {
+          this.redirect = route.query && route.query.redirect
+        },
+        immediate: true
+      }
     },
     methods: {
       showPwd() {
