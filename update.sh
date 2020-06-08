@@ -1,0 +1,5 @@
+#! /bin/sh
+npm run build:prod
+git add .
+git commit -m "调整布局"
+git psuh

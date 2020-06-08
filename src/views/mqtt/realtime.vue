@@ -1,5 +1,27 @@
 <template>
   <div class="app-container">
+    <el-row
+      style="background:#fff;padding:16px 16px 0;margin-bottom:32px;"
+    >
+      <line-chart :chart-data="realTimeData" />
+    </el-row>
+    <el-row class="search-button">
+      <el-col :span="6">
+        <el-input
+          v-model="currentClient"
+          size="medium"
+          placeholder="选择一个设备"
+        >
+          <el-button
+            slot="append"
+            icon="el-icon-search"
+            @click="getRealTimeData()"
+          >
+            获取实时数据
+          </el-button>
+        </el-input>
+      </el-col>
+    </el-row>
     <el-table
       v-loading="ClientsListLoading"
       :data="OnlineClientsList"
@@ -31,30 +53,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-row class="search-button">
-      <el-col :span="6">
-        <el-input
-          v-model="currentClient"
-          size="medium"
-          placeholder="选择一个设备"
-        >
-          <el-button
-            slot="append"
-            icon="el-icon-search"
-            @click="getRealTimeData()"
-          >
-            获取实时数据
-          </el-button>
-        </el-input>
-      </el-col>
-    </el-row>
-
-    <el-row
-      style="background:#fff;padding:16px 16px 0;margin-bottom:32px;"
-    >
-      <line-chart :chart-data="realTimeData" />
-    </el-row>
-
   </div>
 </template>
 

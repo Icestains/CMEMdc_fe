@@ -12,3 +12,4 @@ tests/**/coverage/
 *.ntvs*
 *.njsproj
 *.sln
+update.sh

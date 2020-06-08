@@ -1,5 +1,9 @@
 <template>
   <div class="app-container">
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <line-chart :chart-data="lineChartData" />
+    </el-row>
+
     <el-table
       v-loading="ClientsListLoading"
       :data="EmqxClientsList"
@@ -43,10 +47,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
-    </el-row>
 
   </div>
 </template>
