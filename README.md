@@ -1,6 +1,6 @@
 # 监控系统前端
 
-本项目基于[vue admin template](https://github.com/PanJiaChen/vue-admin-template)项目
+本项目基于[vue admin template](https://github.com/PanJiaChen/vue-admin-template)项目，实现获取在线数据可视化功能。
 
 > A minimal vue admin template with Element UI & axios & iconfont & permission control & lint
 
@@ -64,9 +64,3 @@ If you want router permission && generate menu by user roles , you can use this 
 
 - [awesome-project](https://github.com/PanJiaChen/vue-element-admin/issues/2312)
 
-
-## License
-
-[MIT](https://github.com/PanJiaChen/vue-admin-template/blob/master/LICENSE) license.
-
-Copyright (c) 2017-present PanJiaChen
