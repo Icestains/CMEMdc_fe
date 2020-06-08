@@ -76,12 +76,20 @@ export const constantRoutes = [
   {
     path: '/mqtt',
     component: Layout,
+    meta: { title: '可视化数据', icon: 'table' },
     children: [{
-      path: 'mqtt',
-      name: 'Mqtt',
+      path: 'history',
+      name: 'MqttHis',
       component: () => import('@/views/mqtt/index'),
-      meta: { title: 'MQTT data', icon: 'table' }
-    }]
+      meta: { title: '历史数据', icon: 'table' }
+    },
+      {
+      path: 'online',
+      name: 'MqttOnline',
+      component: () => import('@/views/mqtt/realtime'),
+      meta: { title: '实时数据', icon: 'table' }
+    }
+    ]
   },
 
   // 404 page must be placed at the end !!!
