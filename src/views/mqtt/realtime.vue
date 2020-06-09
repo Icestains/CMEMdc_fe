@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <el-row
+      v-if="showRealTime"
       style="background:#fff;padding:16px 16px 0;margin-bottom:32px;"
     >
       <line-chart :chart-data="realTimeData" />
@@ -20,6 +21,17 @@
             获取实时数据
           </el-button>
         </el-input>
+      </el-col>
+      <el-col :span="6">
+        <el-button
+          v-if="showRealTime"
+          type="danger"
+          size="medium"
+          icon="el-icon-circle-close"
+          @click="onClose()"
+        >
+          断开连接
+        </el-button>
       </el-col>
     </el-row>
     <el-table
@@ -82,7 +94,8 @@
           randomData: [],
           randomDataTime: []
         },
-        realTimeClient: null
+        realTimeClient: null,
+        showRealTime: false
 
       }
     },
@@ -115,6 +128,7 @@
       },
       getRealTimeData() {
         this.onClose()
+
         console.log(this.EmqxClientsList.find(item => item.ClientId === this.currentClient))
         if (!this.EmqxClientsList.find(item => item.ClientId === this.currentClient)) {
           this.$message('请获取有效在线客户端')
@@ -156,6 +170,9 @@
             subs,
             { qos: 1 },
             (err) => {
+              this.showRealTime = true
+
+              this.$message.success(`连接"${subs[0]}"成功！`)
               console.log(err || '订阅成功')
             })
         })
@@ -170,8 +187,11 @@
         })
       },
       onClose() {
+        this.showRealTime = false
         if (this.realTimeClient) {
           this.realTimeClient.end()
+          this.realTimeClient = null
+          this.$message.info(`断开"${this.realTimeData.clientId}"连接`)
         }
         this.realTimeData.randomData = []
         this.realTimeData.randomDataTime = []

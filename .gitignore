@@ -13,3 +13,4 @@ tests/**/coverage/
 *.njsproj
 *.sln
 update.sh
+*.sh

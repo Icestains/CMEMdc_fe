@@ -25,7 +25,7 @@
       },
       height: {
         type: String,
-        default: '700px'
+        default: '500px'
       },
       autoResize: {
         type: Boolean,
